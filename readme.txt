@@ -21,26 +21,19 @@ Before the plugin can be used, it must be configured as follows:
 1. Enter the relevant Qlik Saas server URL, WebIntegrationID, App ID, Private Key and KeyID to connect to your Qlik Saas tenant.
 
 == Prepare Installation in Qlik Saas ==
-- Create Signed Tokens for JWT Authorization<br>
-https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#create-a-public--private-key-pair-for-signing-jwts
-- Configure JWT identity provider
-https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#configure-jwt-identity-provider
-- Add Public key to the config
-https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#add-the-public-key-to-the-configuration
-- Input issuer <br>
-https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#input-issuer-and-key-id-values
+- [Create Signed Tokens for JWT Authorization](https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#create-a-public--private-key-pair-for-signing-jwts)
+- [Configure JWT identity provider](https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#configure-jwt-identity-provider)
+- [Add Public key to the config](https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#add-the-public-key-to-the-configuration)
+- [Input issuer](https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#input-issuer-and-key-id-values)
 
 Since the Plugin uses JWT auth, you need to place your apps in a managed space and have the group anon-view added as a member of the space to view.
 
 == Installation ==
  - Add `Host` of Qlik Saas as `<tenant>.<region>.qlikcloud.com`
- - Add your WebIntegrationID <br>
-https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-adminster-web-integrations.htm
+ - [Add your WebIntegrationID](https://help.qlik.com/en-US/cloud-services/Subsystems/Hub/Content/Sense_Hub/Admin/mc-adminster-web-integrations.htm)
  - Add you AppID
- - Add your Private key from first step (Create a public / private key pair for signing JWTs) <br>
-https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#create-a-public--private-key-pair-for-signing-jwts
- - Add the Key ID created from previous step <br>
-https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#input-issuer-and-key-id-values
+ - [Add your Private key from first step (Create a public / private key pair for signing JWTs)](https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#create-a-public--private-key-pair-for-signing-jwts)
+ - [Add the Key ID created from previous step](https://qlik.dev/authenticate/jwt/create-signed-tokens-for-jwt-authorization/#input-issuer-and-key-id-values)
 
 == How to Use ==
 
@@ -78,7 +71,8 @@ This shortcode allows you to embed objects for mashup. The shortcode syntax is a
 
 - Charts:
 `[qlik_saas_object id="CSxZqS" height="400px"]`
-*[full list of supported visualizations]https://qlik.dev/embed/foundational-knowledge/visualizations*
+
+[Full list of supported Nebula visualizations](https://qlik.dev/embed/foundational-knowledge/visualizations)
 
 Parameters are as follows:
 * id="": Is the object id (right click a chart in your qlik app, click share then embed and look for Object ID under the preview). 
@@ -93,25 +87,3 @@ Parameters are as follows:
 4. Choose the previously downloaded zip file and click "Install Now".
 5. WordPress will install the plugin for you. Once complete, click on "Activate Plugin". Click the "Activate" button to complete the installation.
 6. The plugin is now installed and ready to Configure.
-
-== Frequently Asked Questions ==
-
-== Screenshots ==
-
-1. Admin Settings Page
-2. Shortcode with the sheet id
-3. Preview iframed sheet
-4. Shortcodes for mashup with object ids
-5. Helpdesk sheet 1 with object ids
-5. Helpdesk sheet 2 with object ids
-
-== Changelog ==
-
-= 1.0.7 =
-* Add object ids for mashups
-
-= 1.0.6 =
-* Support multiple shortcodes / sheet iframes in one page
-
-= 1.0.5 =
-* Init with iframing a sheet
