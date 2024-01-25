@@ -1,5 +1,4 @@
 async function isLoggedIn() {
-    console.log('Check if logged in...');
     return await fetch(`https://${qs_settings.host}/api/v1/users/me`, {
         method: 'GET',
         mode: 'cors',
@@ -22,7 +21,6 @@ async function getJWT() {
 };
 
 async function login_sheet(jwt) {
-    console.log('Logging in...');
     var authHeader = `Bearer ${jwt}`;
     return await fetch(`https://${qs_settings.host}/login/jwt-session?qlik-web-integration-id=${qs_settings.webIntegrationID}`, {
         method: 'POST',
@@ -112,7 +110,7 @@ async function init() {
                 // await login_sheet(jwt);
                 var loginRes = await login_sheet(jwt);
                 if (loginRes.status != 200) {
-                    console.log('Something went wrong while logging in.')
+                    console.error('Something went wrong while logging in.')
                 } else {
                     const loggedIn = await isLoggedIn();
                     if (loggedIn.status != 200) {

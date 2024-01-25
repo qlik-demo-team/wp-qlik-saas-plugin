@@ -1,5 +1,4 @@
 async function isLoggedIn_nebula() {
-  console.log('Check if logged in - nebula...');
   return await fetch(`https://${settings.host}/api/v1/users/me`, {
       method: 'GET',
       mode: 'cors',
@@ -23,7 +22,6 @@ async function getJWT_nebula() {
 
 
 async function login_nebula(jwt) {
-  console.log('Logging in - nebula...');
   var authHeader = `Bearer ${jwt}`;
   return await fetch(`https://${settings.host}/login/jwt-session?qlik-web-integration-id=${settings.webIntegrationID}`, {
       method: 'POST',
@@ -150,13 +148,12 @@ const initNebula = async () => {
   try {
     const loggedIn = await isLoggedIn_nebula();  
     if(loggedIn.status != 200) {
-      console.log('Not logged in...');
       const tokenRes = await getJWT_nebula();
         if (tokenRes.status == 200) {
           const respJson = await tokenRes.json();
           var loginRes = await login_nebula(respJson);
           if (loginRes.status != 200) {
-              console.log('Something went wrong while logging in.')
+              console.error('Something went wrong while logging in.')
           } else {
               const loggedIn = await isLoggedIn_nebula();
               if (loggedIn.status != 200) {
@@ -166,7 +163,7 @@ const initNebula = async () => {
           }
       } else {
         const error =  await tokenRes.json();
-          console.log('Something went wrong: ', error.message);
+          console.error('Something went wrong: ', error.message);
       }
     }
   } catch (err) {
