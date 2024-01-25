@@ -1,0 +1,9 @@
+{
+	"name": "yianni-ververis/qlik-saas-wordpress-plugin",
+	"type": "wordpress-plugin",
+	"repositories": [
+	],
+	"require": {
+		"firebase/php-jwt": "^5.4"
+	}
+}

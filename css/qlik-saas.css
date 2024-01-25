@@ -1,0 +1,80 @@
+.qlik-tab-wrapper {
+    background-color: #E7ECF0;
+    padding: 3px;
+    margin-bottom: 10px;
+}
+
+.qlik-tab-wrapper .objects-containers {
+    border-left: 1px solid transparent;
+    border-right: 1px solid transparent;
+}
+
+/* Styles for the tab container */
+.qlik-multi-sheets-wrapper {
+    font-family: 'Arial', sans-serif;
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styles for the tabs list */
+.qlik-tabs {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    display: flex;
+}
+
+/* Styles for each tab */
+.qlik-tabs li {
+    padding: 10px 15px;
+    margin: 0;
+    display: inline-block;
+    border: 1px solid transparent;
+    border-bottom: none;
+    cursor: pointer;
+    background-color: #E7ECF0;
+    margin-right: 2px; /* Spacing between tabs */
+    padding: 10px 15px;
+    font-family: 'Open Sans Pro' sans-serif;
+    color: #002642;
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+/* Styles for the active tab */
+.qlik-tabs li.active {
+    background-color: #fff;
+    border-color: transparent;
+    border-bottom: 1px solid white;
+    font-weight: bold;
+    z-index: 1; /* Ensures the active tab overlaps the border of the tab content area */
+    color: #006DC1;
+}
+
+/* Styles for the tab content container */
+.qlik-sheets-container {
+    padding: 0;
+}
+
+/* Styles for the tab content */
+.qlik-sheet-content {
+    display: none; /* Hide inactive tabs */
+    border: 1px solid transparent;
+    border-top: none;
+}
+
+/* Show the active tab content */
+.qlik-sheet-content.active {
+    display: block;
+}
+
+.qlik-sheet-content iframe {
+    border: none !important;
+}
+
+/* Additional styles for the selections area */
+.qlik-selections {
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+}
