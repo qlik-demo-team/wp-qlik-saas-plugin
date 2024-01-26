@@ -11,7 +11,7 @@ async function isLoggedIn_nebula() {
 }
 
 async function getJWT_nebula() {
-  return await fetch('/wordpress/wp-json/qs/v1/token', {
+  return await fetch('/wp-json/qs/v1/token', {
       method: 'GET',
       mode: 'cors',
       headers: {
