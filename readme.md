@@ -1,10 +1,16 @@
-### Plugin Name
+### WordPress Qlik SaaS Plugin
 Contributors: qlik1oim
+<br>
 Tags: qlik, saas
+<br>
 Requires at least: 5.0
+<br>
 Tested up to: 5.8.1
+<br>
 Stable tag: 1.0.7
+<br>
 License: MIT
+<br>
 License URI: https://opensource.org/licenses/MIT
 
 Allows you to create a mashup by embedding Qlik Saas sheets inside WordPress pages.
