@@ -13,7 +13,7 @@ License: MIT
 <br>
 License URI: https://opensource.org/licenses/MIT
 
-Allows you to create a mashup by embedding Qlik Saas sheets inside WordPress pages.
+Allows you to embed Qlik Cloud sheets or objects inside your WordPress pages.
 
 ## Description
 This is a simple plugin to connect to your Qlik Saas tenant and create a mashup by getting the sheet with a shortcode inside a page within the admin panel
