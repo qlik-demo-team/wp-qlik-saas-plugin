@@ -6,54 +6,78 @@
 	function get_qs_token() {
 
 		$tokenSettings = array(
-			'host'							=> esc_attr( get_option('qs_host') ),
-			'privateKey'					=> esc_attr( get_option('qs_privateKey') ),		
-			'keyID'							=> esc_attr( get_option('qs_keyid') ),
+			'host'        => esc_attr( get_option('qs_host') ),
+			'clientId'    => esc_attr( get_option('qs_client_id') ), 
+			'clientSecret'=> esc_attr( get_option('qs_client_secret') ),
 		);
-
-		$jwt = null;
-		if (
-			isset($tokenSettings['host']) && !empty($tokenSettings['host']) && 
-			isset($tokenSettings['privateKey']) && !empty($tokenSettings['privateKey']) && 
-			isset($tokenSettings['keyID']) && !empty($tokenSettings['keyID'])
-		) {
-
-			$issuedAt   = new DateTimeImmutable();
-			$expire     = $issuedAt->modify('+30 minutes')->getTimestamp();
-
-			$uuid = wp_generate_uuid4();
-
-			$payload = [
-					'iss'  						=> $tokenSettings['host'],
-					"aud"						=> 'qlik.api/login/jwt-session',
-					'iat'  						=> $issuedAt->getTimestamp(),
-					'nbf'  						=> $issuedAt->getTimestamp(),
-					'jti'						=> $uuid,
-					'exp'						=> $expire,
-					'sub'						=> $uuid,
-					'subType'					=> 'user',
-					'name'						=> 'Anon_' . $uuid,
-					'email'						=> $uuid . '@anonymoususer.anon',
-					'email_verified'			=> true,
-					'groups'					=> ['anon-view'],
-			];
-			
-			// Encode the array to a JWT string.
-			JWT::$leeway = 30 * 60; // $leeway in seconds
 	
-			// encode($payload, $key, $alg = 'HS256', $keyId = null, $head = null)
-			$jwt = JWT::encode(
-				$payload,
-				$tokenSettings['privateKey'],
-				'RS256',
-				$tokenSettings['keyID']
-			);
-		} else {
-			$jwt = new WP_Error( 'error', 'Cannot Generate JWT token.', array( 'status' => 404 ) );;
+		$tenant_FQDN = $tokenSettings['host'];
+		$client_id = $tokenSettings['clientId'];
+		$client_secret = $tokenSettings['clientSecret'];
+	
+		// Step 1: Get the client token
+		$clientTokenResponse = wp_remote_post("https://$tenant_FQDN/oauth/token", array(
+			'method'      => 'POST',
+			'headers'     => array('Content-Type' => 'application/json'),
+			'body'        => json_encode(array(
+				'client_id'     => $client_id,
+				'client_secret' => $client_secret,
+				'grant_type'    => 'client_credentials',
+			)),
+		));
+	
+		if (is_wp_error($clientTokenResponse) || wp_remote_retrieve_response_code($clientTokenResponse) !== 200) {
+			return new WP_Error('error', 'Failed to get OAuth token.', array('status' => 500));
 		}
-		
-		return $jwt;		
+	
+		$clientToken = json_decode(wp_remote_retrieve_body($clientTokenResponse), true)['access_token'];
+	
+		// Step 2: Generate a random UUID for the user
+		$randID = wp_generate_uuid4();
+	
+		// Step 3: Create a new user in Qlik
+		$createUserResponse = wp_remote_post("https://$tenant_FQDN/api/v1/users", array(
+			'method'      => 'POST',
+			'headers'     => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => "Bearer $clientToken",
+			),
+			'body'        => json_encode(array(
+				'name'         => "Anonymous_$randID",
+				'subject'      => "ANON\\$randID",
+				'assignedRoles'=> array(array('name' => 'EmbeddedAnalyticsUser')),
+			)),
+		));
+	
+		if (is_wp_error($createUserResponse) || wp_remote_retrieve_response_code($createUserResponse) !== 201) {
+			return new WP_Error('error', 'Failed to create user.', array('status' => 500));
+		}
+	
+		// Step 4: Impersonate the newly created user to get their token
+		$impersonateResponse = wp_remote_post("https://$tenant_FQDN/oauth/token", array(
+			'method'      => 'POST',
+			'headers'     => array('Content-Type' => 'application/json'),
+			'body'        => json_encode(array(
+				'client_id'     => $client_id,
+				'client_secret' => $client_secret,
+				'grant_type'    => 'urn:qlik:oauth:user-impersonation',
+				'user_lookup'   => array(
+					'field' => 'subject',
+					'value' => "ANON\\$randID",
+				),
+				'scope'        => 'user_default',
+			)),
+		));
+	
+		if (is_wp_error($impersonateResponse) || wp_remote_retrieve_response_code($impersonateResponse) !== 200) {
+			return new WP_Error('error', 'Failed to get impersonated user OAuth token.', array('status' => 500));
+		}
+	
+		$impersonatedToken = json_decode(wp_remote_retrieve_body($impersonateResponse), true)['access_token'];
+	
+		return $impersonatedToken;
 	}
+	
 	
 	function at_rest_init()
 	{
